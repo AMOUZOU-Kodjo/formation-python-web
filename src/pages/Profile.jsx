@@ -68,7 +68,7 @@ export default function Profile() {
         <div className="h-32 bg-gradient-to-r from-primary to-secondary opacity-80" />
 
         <div className="px-6 pb-6 relative">
-          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 -mt-12 mb-4">
+          <div className="flex flex-col items-center gap-4 -mt-12 mb-4">
             <div className="relative group">
               <div className="avatar">
                 <div className="w-24 h-24 rounded-full ring-4 ring-base-200 overflow-hidden bg-base-300">
@@ -96,9 +96,9 @@ export default function Profile() {
               <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleUpload} />
             </div>
 
-            <div className="text-center sm:text-left flex-1 min-w-0">
+            <div className="text-center flex-1 min-w-0">
               {editing ? (
-                <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center justify-center gap-2 mt-2">
                   <input
                     type="text"
                     className="input input-bordered input-sm w-48"
@@ -114,7 +114,7 @@ export default function Profile() {
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center justify-center gap-2 mt-2">
                   <h2 className="text-xl font-bold">{profile?.display_name || user?.email?.split('@')[0]}</h2>
                   <button onClick={() => setEditing(true)} className="btn btn-ghost btn-xs text-base-content/40 hover:text-base-content">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -151,10 +151,10 @@ export default function Profile() {
 
           <progress className="progress progress-primary w-full mb-6" value={stats.completed} max={stats.total} />
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap justify-center gap-2">
             <Link to="/progress" className="btn btn-primary btn-sm">📊 Progression détaillée</Link>
             <Link to="/curriculum" className="btn btn-outline btn-sm">📚 Continuer la formation</Link>
-            <button onClick={signOut} className="btn btn-ghost btn-sm text-error ml-auto">Déconnexion</button>
+            <button onClick={signOut} className="btn btn-ghost btn-sm text-error">Déconnexion</button>
           </div>
         </div>
       </div>
