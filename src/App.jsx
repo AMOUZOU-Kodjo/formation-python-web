@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import Layout from './components/Layout'
+import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import Curriculum from './pages/Curriculum'
 import ModulePage from './pages/Module'
@@ -19,13 +20,13 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/curriculum" element={<Curriculum />} />
-            <Route path="/module/:moduleId" element={<ModulePage />} />
-            <Route path="/exercise/:moduleId" element={<Exercise />} />
-            <Route path="/quiz/:moduleId" element={<QuizPage />} />
-            <Route path="/progress" element={<Progress />} />
+            <Route path="/module/:moduleId" element={<ProtectedRoute><ModulePage /></ProtectedRoute>} />
+            <Route path="/exercise/:moduleId" element={<ProtectedRoute><Exercise /></ProtectedRoute>} />
+            <Route path="/quiz/:moduleId" element={<ProtectedRoute><QuizPage /></ProtectedRoute>} />
+            <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/profile" element={<Profile />} />
             <Route path="*" element={
               <div className="text-center py-20">
                 <h1 className="text-6xl font-bold text-primary">404</h1>
