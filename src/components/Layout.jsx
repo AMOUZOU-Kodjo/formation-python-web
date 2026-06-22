@@ -12,10 +12,19 @@ const NAV = [
 
 export default function Layout({ children }) {
   const [sidebar, setSidebar] = useState(false)
+  const [selectedPart, setSelectedPart] = useState(null)
   const { pathname } = useLocation()
   const { user, signOut, isConfigured } = useAuth()
-  const { getOverallProgress, syncing } = useProgress(user)
+  const { getOverallProgress, syncing, getModuleProgress } = useProgress(user)
   const stats = getOverallProgress(MODULES.length)
+
+  const filteredModules = selectedPart
+    ? MODULES.filter(m => m.part === selectedPart)
+    : MODULES
+
+  const partLabel = selectedPart
+    ? `Partie ${selectedPart}`
+    : 'Tous les modules'
 
   return (
     <div className="drawer lg:drawer-open">
@@ -143,16 +152,35 @@ export default function Layout({ children }) {
 
           <div className="divider my-1 mx-4 text-xs text-base-content/30">MODULES</div>
 
-          <ul className="menu menu-sm p-2 gap-0.5 flex-1 overflow-y-auto">
-            {MODULES.map(m => (
-              <li key={m.id}>
-                <Link to={`/module/${m.id}`} onClick={() => setSidebar(false)}
-                  className={`${pathname.includes(m.id) ? 'active text-primary' : ''} gap-2`}>
-                  <span className="text-base">{m.icon}</span>
-                  <span className="truncate">{m.short}</span>
-                </Link>
-              </li>
+          <div className="flex gap-1 px-2 py-1 flex-wrap">
+            <button onClick={() => setSelectedPart(null)}
+              className={`btn btn-xs ${selectedPart === null ? 'btn-primary' : 'btn-ghost'}`}>
+              Tous
+            </button>
+            {[1, 2, 3, 4].map(p => (
+              <button key={p} onClick={() => setSelectedPart(p)}
+                className={`btn btn-xs ${selectedPart === p ? 'btn-primary' : 'btn-ghost'}`}>
+                {p}
+              </button>
             ))}
+          </div>
+
+          <p className="text-xs text-base-content/30 px-4 pb-1">{partLabel} ({filteredModules.length})</p>
+
+          <ul className="menu menu-sm p-2 gap-0.5 flex-1 overflow-y-auto">
+            {filteredModules.map(m => {
+              const p = getModuleProgress(m.id)
+              return (
+                <li key={m.id}>
+                  <Link to={`/module/${m.id}`} onClick={() => setSidebar(false)}
+                    className={`${pathname.includes(m.id) ? 'active text-primary' : ''} gap-2 ${p.completed ? 'opacity-60' : ''}`}>
+                    <span className="text-base">{m.icon}</span>
+                    <span className="truncate flex-1">{m.short}</span>
+                    {p.completed && <span className="text-xs text-success">✓</span>}
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
 
           <div className="p-3 border-t border-base-300">
