@@ -1,11 +1,13 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
+const ADMIN_EMAIL = 'formation@gmail.com'
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const isAdmin = user?.email === ADMIN_EMAIL
 
   useEffect(() => {
     if (!isSupabaseConfigured()) {
@@ -44,7 +46,7 @@ export function AuthProvider({ children }) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, isConfigured: isSupabaseConfigured() }}>
+    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, isAdmin, isConfigured: isSupabaseConfigured() }}>
       {children}
     </AuthContext.Provider>
   )

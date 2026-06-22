@@ -14,7 +14,7 @@ export default function Layout({ children }) {
   const [sidebar, setSidebar] = useState(false)
   const [selectedPart, setSelectedPart] = useState(null)
   const { pathname } = useLocation()
-  const { user, signOut, isConfigured } = useAuth()
+  const { user, signOut, isConfigured, isAdmin } = useAuth()
   const { getOverallProgress, syncing, getModuleProgress } = useProgress(user)
   const stats = getOverallProgress(MODULES.length)
 
@@ -62,6 +62,7 @@ export default function Layout({ children }) {
                       <li className="menu-title"><span>{user.email?.split('@')[0]}</span></li>
                       <li><Link to="/profile" onClick={() => setSidebar(false)}>👤 Profil</Link></li>
                       <li><Link to="/progress" onClick={() => setSidebar(false)}>📊 Progression</Link></li>
+                      {isAdmin && <li><Link to="/admin" onClick={() => setSidebar(false)}>⚙️ Admin</Link></li>}
                       <li><button onClick={signOut}>🚪 Déconnexion</button></li>
                     </>
                   ) : (
@@ -115,6 +116,14 @@ export default function Layout({ children }) {
                 </Link>
               </li>
             ))}
+            {isAdmin && (
+              <li>
+                <Link to="/admin" onClick={() => setSidebar(false)}
+                  className={`${pathname.startsWith('/admin') ? 'active text-primary' : ''}`}>
+                  ⚙️ Admin
+                </Link>
+              </li>
+            )}
           </ul>
 
           {isConfigured && (user ? (

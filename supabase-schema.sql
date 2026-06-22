@@ -100,3 +100,27 @@ CREATE POLICY "Users can update their own avatar"
   ON storage.objects FOR UPDATE USING (
     bucket_id = 'avatars' AND (storage.foldername(name))[1] = auth.uid()::text
   );
+
+-- Table des modules (ajoutés par l'admin)
+CREATE TABLE IF NOT EXISTS modules (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  short TEXT NOT NULL,
+  part INTEGER NOT NULL,
+  duration TEXT DEFAULT '2h',
+  desc TEXT,
+  icon TEXT DEFAULT '📘',
+  color TEXT DEFAULT '#7c3aed',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE modules ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Anyone can view modules" ON modules;
+DROP POLICY IF EXISTS "Admin can manage modules" ON modules;
+
+CREATE POLICY "Anyone can view modules"
+  ON modules FOR SELECT USING (true);
+
+CREATE POLICY "Admin can manage modules"
+  ON modules FOR INSERT WITH CHECK (auth.role() = 'authenticated');

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
+import AdminRoute from './components/AdminRoute'
 import Home from './pages/Home'
 import Curriculum from './pages/Curriculum'
 import ModulePage from './pages/Module'
@@ -11,6 +12,9 @@ import Progress from './pages/Progress'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Profile from './pages/Profile'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminStudents from './pages/admin/AdminStudents'
+import AdminCourses from './pages/admin/AdminCourses'
 
 export default function App() {
   return (
@@ -27,6 +31,9 @@ export default function App() {
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+            <Route path="/admin/students" element={<AdminRoute><AdminStudents /></AdminRoute>} />
+            <Route path="/admin/courses" element={<AdminRoute><AdminCourses /></AdminRoute>} />
             <Route path="*" element={
               <div className="text-center py-20">
                 <h1 className="text-6xl font-bold text-primary">404</h1>
