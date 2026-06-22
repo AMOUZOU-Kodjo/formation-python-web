@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS modules (
   short TEXT NOT NULL,
   part INTEGER NOT NULL,
   duration TEXT DEFAULT '2h',
-  desc TEXT,
+  "desc" TEXT,
   icon TEXT DEFAULT '📘',
   color TEXT DEFAULT '#7c3aed',
   created_at TIMESTAMPTZ DEFAULT now()

@@ -19,7 +19,7 @@ export default function AdminCourses() {
     setMsg('')
     const id = `${String(MODULES.length + 1).padStart(2, '0')}-${short.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`
     const { error } = await supabase.from('modules').insert({
-      id, title, short, part, duration, desc, icon,
+      id, title, short, part, duration, "desc": desc, icon,
       color: ['#4CAF50', '#FF9800', '#9C27B0', '#D32F2F'][part - 1],
     })
     if (error) setMsg(`Erreur : ${error.message}`)
