@@ -15,6 +15,7 @@ export default function Profile() {
   const [displayName, setDisplayName] = useState('')
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [imgError, setImgError] = useState(false)
   const fileRef = useRef(null)
 
   const completedModules = MODULES.filter(m => getModuleProgress(m.id).completed)
@@ -25,7 +26,7 @@ export default function Profile() {
     if (!user || !isConfigured) return
     supabase.from('profiles').select('*').eq('id', user.id).single()
       .then(({ data }) => {
-        if (data) { setProfile(data); setDisplayName(data.display_name || '') }
+        if (data) { setProfile(data); setDisplayName(data.display_name || ''); setImgError(false) }
       })
   }, [user])
 
@@ -43,10 +44,12 @@ export default function Profile() {
     setUploading(true)
     const ext = file.name.split('.').pop()
     const path = `${user.id}/avatar.${ext}`
-    await supabase.storage.from('avatars').upload(path, file, { upsert: true })
+    const { error: uploadErr } = await supabase.storage.from('avatars').upload(path, file, { upsert: true })
+    if (uploadErr) { console.error(uploadErr); setUploading(false); return }
     const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path)
     await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', user.id)
     setProfile(p => ({ ...p, avatar_url: publicUrl }))
+    setImgError(false)
     setUploading(false)
   }
 
@@ -72,8 +75,8 @@ export default function Profile() {
             <div className="relative group">
               <div className="avatar">
                 <div className="w-24 h-24 rounded-full ring-4 ring-base-200 overflow-hidden bg-base-300">
-                  {profile?.avatar_url ? (
-                    <img src={profile.avatar_url} alt="avatar" className="object-cover w-full h-full" />
+                  {profile?.avatar_url && !imgError ? (
+                    <img src={profile.avatar_url} alt="avatar de profil" className="object-cover w-full h-full" onError={() => setImgError(true)} />
                   ) : (
                     <div className="flex items-center justify-center w-full h-full bg-primary text-neutral-content text-3xl font-bold">
                       {initial}
