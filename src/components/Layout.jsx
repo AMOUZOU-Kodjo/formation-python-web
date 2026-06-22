@@ -75,6 +75,16 @@ export default function Layout({ children }) {
         <main className="flex-1 p-4 md:p-8">
           {children}
         </main>
+
+        <footer className="footer footer-center bg-base-200 border-t border-base-300 p-4 text-sm text-base-content/50">
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-4">
+            <span>© {new Date().getFullYear()} Formation Python</span>
+            <span className="hidden sm:inline">·</span>
+            <span>Du débutant à l'expert — 36 modules</span>
+            <span className="hidden sm:inline">·</span>
+            <a href="https://github.com/AMOUZOU-Kodjo/formation-python-web" target="_blank" rel="noopener noreferrer" className="link link-hover">GitHub</a>
+          </div>
+        </footer>
       </div>
 
       <div className="drawer-side z-40">
