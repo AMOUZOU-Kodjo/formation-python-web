@@ -108,30 +108,38 @@ export default function Layout({ children }) {
             ))}
           </ul>
 
-          {isConfigured && (
-            <div className="px-3 py-1">
-              <div className="divider my-1 text-xs text-base-content/30">COMPTE</div>
-              {user ? (
-                <div className="flex items-center gap-2 px-2 py-1.5">
+          {isConfigured && (user ? (
+            <div className="mx-2 my-2 p-3 bg-base-300 rounded-xl border border-base-300">
+              <Link to="/profile" onClick={() => setSidebar(false)} className="no-underline">
+                <div className="flex items-center gap-3 mb-2">
                   <div className="avatar placeholder">
-                    <div className="bg-primary text-neutral-content w-7 rounded-full text-xs font-bold">
+                    <div className="bg-primary text-neutral-content w-10 rounded-full text-base font-bold ring-2 ring-base-200">
                       {user.email?.charAt(0).toUpperCase()}
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm truncate">{user.email}</p>
-                    <Link to="/profile" className="text-xs link link-primary" onClick={() => setSidebar(false)}>Profil</Link>
+                    <p className="font-semibold text-sm truncate text-base-content">{user.email?.split('@')[0]}</p>
+                    <p className="text-xs text-base-content/40 truncate">{user.email}</p>
                   </div>
-                  <button onClick={signOut} className="btn btn-ghost btn-xs">🚪</button>
                 </div>
-              ) : (
-                <div className="flex gap-1 px-2 py-1">
-                  <Link to="/login" className="btn btn-primary btn-xs flex-1" onClick={() => setSidebar(false)}>Connexion</Link>
-                  <Link to="/signup" className="btn btn-outline btn-xs flex-1" onClick={() => setSidebar(false)}>Inscription</Link>
-                </div>
-              )}
+              </Link>
+              <div className="flex items-center justify-between text-xs text-base-content/50 px-1 mb-2">
+                <span>{stats.completed}/{stats.total} modules</span>
+                <span>{stats.percentage}%</span>
+              </div>
+              <progress className="progress progress-primary w-full h-1.5 mb-3" value={stats.completed} max={stats.total} />
+              <div className="flex gap-1">
+                <Link to="/profile" onClick={() => setSidebar(false)} className="btn btn-primary btn-xs flex-1">Profil</Link>
+                <button onClick={signOut} className="btn btn-ghost btn-xs text-error">Déconnexion</button>
+              </div>
             </div>
-          )}
+          ) : (
+            <div className="mx-2 my-2 p-3 bg-base-300 rounded-xl border border-base-300">
+              <p className="text-xs font-semibold text-base-content/50 mb-2">Compte</p>
+              <Link to="/login" onClick={() => setSidebar(false)} className="btn btn-primary btn-sm w-full mb-1.5">🔐 Connexion</Link>
+              <Link to="/signup" onClick={() => setSidebar(false)} className="btn btn-outline btn-sm w-full">📝 Inscription</Link>
+            </div>
+          ))}
 
           <div className="divider my-1 mx-4 text-xs text-base-content/30">MODULES</div>
 
