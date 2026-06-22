@@ -1,5 +1,6 @@
 -- Schéma Supabase pour la Formation Python
 -- Exécute ce SQL dans l'éditeur SQL de Supabase
+-- Peut être exécuté plusieurs fois sans erreur
 
 -- Table des profils utilisateurs
 CREATE TABLE IF NOT EXISTS profiles (
@@ -52,7 +53,14 @@ CREATE TRIGGER on_auth_user_created
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE course_progress ENABLE ROW LEVEL SECURITY;
 
--- Politiques : chaque utilisateur ne voit que ses propres données
+-- Politiques : suppression avant création pour permettre la ré-exécution
+DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can view own progress" ON course_progress;
+DROP POLICY IF EXISTS "Users can insert own progress" ON course_progress;
+DROP POLICY IF EXISTS "Users can update own progress" ON course_progress;
+DROP POLICY IF EXISTS "Users can delete own progress" ON course_progress;
+
 CREATE POLICY "Users can view own profile"
   ON profiles FOR SELECT USING (auth.uid() = id);
 
@@ -71,11 +79,15 @@ CREATE POLICY "Users can update own progress"
 CREATE POLICY "Users can delete own progress"
   ON course_progress FOR DELETE USING (auth.uid() = user_id);
 
--- Bucket de stockage pour les avatars (à créer aussi dans le dashboard Storage)
+-- Bucket de stockage pour les avatars
 INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true)
 ON CONFLICT (id) DO NOTHING;
 
 -- Politiques pour le bucket avatars
+DROP POLICY IF EXISTS "Anyone can view avatars" ON storage.objects;
+DROP POLICY IF EXISTS "Users can upload their own avatar" ON storage.objects;
+DROP POLICY IF EXISTS "Users can update their own avatar" ON storage.objects;
+
 CREATE POLICY "Anyone can view avatars"
   ON storage.objects FOR SELECT USING (bucket_id = 'avatars');
 
