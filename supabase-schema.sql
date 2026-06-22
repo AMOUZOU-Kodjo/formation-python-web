@@ -70,3 +70,21 @@ CREATE POLICY "Users can update own progress"
 
 CREATE POLICY "Users can delete own progress"
   ON course_progress FOR DELETE USING (auth.uid() = user_id);
+
+-- Bucket de stockage pour les avatars (à créer aussi dans le dashboard Storage)
+INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Politiques pour le bucket avatars
+CREATE POLICY "Anyone can view avatars"
+  ON storage.objects FOR SELECT USING (bucket_id = 'avatars');
+
+CREATE POLICY "Users can upload their own avatar"
+  ON storage.objects FOR INSERT WITH CHECK (
+    bucket_id = 'avatars' AND (storage.foldername(name))[1] = auth.uid()::text
+  );
+
+CREATE POLICY "Users can update their own avatar"
+  ON storage.objects FOR UPDATE USING (
+    bucket_id = 'avatars' AND (storage.foldername(name))[1] = auth.uid()::text
+  );
