@@ -8,7 +8,7 @@ export default function Curriculum() {
   const { getModuleProgress } = useProgress(user)
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-8xl mx-auto">
       <h1 className="text-3xl font-bold mb-1">📚 Programme complet</h1>
       <p className="text-base-content/60 mb-8">36 modules répartis en 4 parties — du débutant à l'expert</p>
 

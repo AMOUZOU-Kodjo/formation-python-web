@@ -11,7 +11,7 @@ export default function Progress() {
   const withQuiz = MODULES.filter(m => getModuleProgress(m.id).quizScore !== null)
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-8xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold">📊 Ma progression</h1>

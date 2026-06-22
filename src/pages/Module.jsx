@@ -70,7 +70,7 @@ export default function ModulePage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-8xl mx-auto">
       <div className="mb-4">
         <Link to="/curriculum" className="link link-primary text-sm no-underline">← Retour au programme</Link>
       </div>

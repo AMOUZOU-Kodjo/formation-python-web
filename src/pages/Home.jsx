@@ -3,7 +3,7 @@ import { MODULES, PARTS } from '../data/modules'
 
 export default function Home() {
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-8xl mx-auto">
       <div className="hero py-12">
         <div className="hero-content text-center">
           <div>

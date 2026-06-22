@@ -66,7 +66,7 @@ export default function Profile() {
   const initial = (profile?.display_name || user?.email || '?').charAt(0).toUpperCase()
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto py-32 items-center">
       <div className="card bg-base-200 border border-base-300 overflow-hidden">
         <div className="h-32 bg-gradient-to-r from-primary to-secondary opacity-80" />
 

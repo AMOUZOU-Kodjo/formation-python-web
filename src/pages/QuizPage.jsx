@@ -26,7 +26,7 @@ export default function QuizPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-8xl mx-auto">
       <Link to={`/module/${moduleId}`} className="link link-primary text-sm no-underline">← Retour au cours</Link>
       <h1 className="text-2xl font-bold mt-3 mb-1">📝 Quiz : {mod.title}</h1>
       <p className="text-base-content/60 mb-6">{questions.length} questions • Validez vos connaissances</p>
