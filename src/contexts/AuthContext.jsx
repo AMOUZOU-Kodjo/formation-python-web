@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
-const ADMIN_EMAIL = 'formation@gmail.com'
+const ADMIN_EMAIL = 'phipsipy@gmail.com'
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
