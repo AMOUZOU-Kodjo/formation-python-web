@@ -8,43 +8,27 @@ import CodeEditor from '../components/CodeEditor'
 function simulatePython(code, inputs) {
   const lines = code.split('\n')
   let inputIndex = 0
-  const inputValues = inputs.split('\n').map(s => s.trim()).filter(Boolean)
-
+  const inputValues = inputs.split('\n').map(s => s.trim())
   const replaced = lines.map(line => {
     if (!line.includes('input(')) return line
-    const val = inputValues[inputIndex] ?? ''
+    const val = inputValues[inputIndex] || ''
     inputIndex++
     const match = line.match(/input\(([^)]*)\)/)
-    if (match) {
-      const prompt = match[1] ? match[1].replace(/['"]/g, '') : ''
-      return line.replace(match[0], `'${val}'`)
-    }
+    if (match) return line.replace(match[0], `'${val}'`)
     return line
   })
-
   const hasPrint = replaced.some(l => l.includes('print('))
-  const outputLines = []
-
-  if (inputIndex > 0 && inputIndex > inputValues.length) {
-    outputLines.push(`⚠️ Pas assez de valeurs d'entrée (${inputIndex} input() attendent)`)
-  }
-
   if (hasPrint) {
-    replaced.forEach(l => {
-      const printMatch = l.match(/print\(['"](.*?)['"]\)/)
-      const printVar = l.match(/print\((\w+)\)/)
-      if (printMatch) outputLines.push(printMatch[1])
-      else if (printVar) outputLines.push(`[${printVar[1]}]`)
-    })
+    const out = replaced.map(l => {
+      const pm = l.match(/print\(['"](.*?)['"]\)/)
+      if (pm) return pm[1]
+      const pv = l.match(/print\((\w+)\)/)
+      if (pv) return `[${pv[1]}]`
+      return null
+    }).filter(Boolean).join('\n')
+    return { code: replaced.join('\n'), output: out || '> Exécutée', inputCount: inputIndex }
   }
-
-  const result = outputLines.length > 0
-    ? outputLines.join('\n')
-    : inputIndex > 0
-      ? '> Exécution simulée avec les valeurs fournies'
-      : undefined
-
-  return { code: replaced.join('\n'), output: result, inputCount: inputIndex }
+  return { code: replaced.join('\n'), output: inputIndex > 0 ? '> Exécutée' : undefined, inputCount: inputIndex }
 }
 
 export default function Exercise() {
@@ -77,24 +61,12 @@ export default function Exercise() {
     setTimeout(() => {
       if (code.includes('input(')) {
         const result = simulatePython(code, inputs)
-        let out = ''
-        if (result.inputCount > 0) {
-          out += `📥 ${result.inputCount} input() remplacé(s)\n`
-          if (inputs.trim()) out += `   Valeurs : ${inputs.trim().split('\n').join(', ')}\n`
-          else out += '   ⚠️ Aucune valeur fournie dans "Entrées"\n'
-          out += '\n'
-        }
-        if (result.output) {
-          out += result.output
-        } else if (result.inputCount > 0) {
-          out += '> Exécution simulée terminée (aucun print détecté)'
-        }
+        let out = result.output || ''
         setOutput(out)
+      } else if (code.includes('print(')) {
+        setOutput('> Exécutée')
       } else {
-        const hasPrint = code.includes('print')
-        setOutput(hasPrint
-          ? '> Exécuté avec succès (simulation)'
-          : '> Code correct\n> Aucune sortie print() détectée')
+        setOutput('> Code correct')
       }
       setRunning(false)
     }, 400)
