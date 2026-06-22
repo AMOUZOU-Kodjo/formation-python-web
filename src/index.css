@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 @plugin "daisyui";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --font-sans: 'Poppins', sans-serif;
   --color-primary: #7c3aed;
   --color-secondary: #4CAF50;
 }
