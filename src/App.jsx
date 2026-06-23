@@ -12,6 +12,7 @@ import Progress from './pages/Progress'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Profile from './pages/Profile'
+import Certificate from './pages/Certificate'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminStudents from './pages/admin/AdminStudents'
 import AdminCourses from './pages/admin/AdminCourses'
@@ -29,6 +30,7 @@ export default function App() {
             <Route path="/quiz/:moduleId" element={<ProtectedRoute><QuizPage /></ProtectedRoute>} />
             <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/certificate" element={<ProtectedRoute><Certificate /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />

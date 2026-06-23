@@ -157,6 +157,9 @@ export default function Profile() {
           <div className="flex flex-wrap justify-center gap-2">
             <Link to="/progress" className="btn btn-primary btn-sm">📊 Progression détaillée</Link>
             <Link to="/curriculum" className="btn btn-outline btn-sm">📚 Continuer la formation</Link>
+            {stats.completed === stats.total && (
+              <Link to="/certificate" className="btn btn-success btn-sm">🏆 Mon attestation</Link>
+            )}
             <button onClick={signOut} className="btn btn-ghost btn-sm text-error">Déconnexion</button>
           </div>
         </div>
