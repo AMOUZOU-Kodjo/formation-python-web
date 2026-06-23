@@ -225,11 +225,6 @@ def create_banner(module_id, title, icon, part, duration, index):
     draw_with_shadow(draw, (text_center, 315), title,
                      fill="white", font=title_font, shadow_color=(0, 0, 0), offset=3, anchor="mt")
 
-    # --- Duration ---
-    dur_font = load_font(28)
-    draw_with_shadow(draw, (text_center, 385), f"Durée : {duration}",
-                     fill=(230, 230, 230), font=dur_font, shadow_color=(0, 0, 0), offset=2, anchor="mt")
-
     # --- Brand ---
     brand_font = load_font(16)
     draw.text((W - 30, H - 30), "FORMATION PYTHON", fill=(255, 255, 255, 100), anchor="rb", font=brand_font)

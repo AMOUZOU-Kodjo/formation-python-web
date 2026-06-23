@@ -124,12 +124,6 @@
     text-shadow: 0 2px 8px rgba(0,0,0,0.5);
     max-width: 100%;
   }
-  .card .duration {
-    font-size: 14px;
-    opacity: 0.7;
-    margin-top: 4px;
-  }
-
   .card .photo-wrapper {
     position: absolute;
     right: 18px;
@@ -208,7 +202,6 @@
     .card .logo-wrapper img { height: 36px; }
     .card .photo-wrapper { width: 155px; height: 155px; }
     .card .num { font-size: 22px; }
-    .card .duration { font-size: 16px; }
     .card .content { padding: 30px 220px 30px 30px; }
   }
 </style>
@@ -286,7 +279,6 @@ function cardHTML(m) {
       <div class="num">MODULE ${m.id}</div>
       <div class="icon">${m.icon}</div>
       <h2>${m.title}</h2>
-      <div class="duration">${m.duration}</div>
     </div>
     <div class="brand">FORMATION PYTHON</div>
   `;
