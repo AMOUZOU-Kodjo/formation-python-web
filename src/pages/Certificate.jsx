@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { MODULES } from '../data/modules'
 import { useProgress } from '../hooks/useProgress'
@@ -14,20 +14,34 @@ function certId(userId, date) {
 }
 
 export default function Certificate() {
-  const { user, isConfigured } = useAuth()
-  const { getModuleProgress, getOverallProgress } = useProgress(user)
+  const { user, isAdmin, isConfigured } = useAuth()
+  const [searchParams] = useSearchParams()
+  const visitUserId = searchParams.get('userId')
+
+  const targetUser = visitUserId && isAdmin ? { id: visitUserId } : user
+  const { getModuleProgress, getOverallProgress } = useProgress(targetUser)
   const stats = getOverallProgress(MODULES.length)
   const allDone = stats.completed === stats.total
 
   const [profile, setProfile] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [targetEmail, setTargetEmail] = useState('')
 
   useEffect(() => {
-    if (!user || !isConfigured) return
-    supabase.from('profiles').select('*').eq('id', user.id).single()
-      .then(({ data }) => { if (data) setProfile(data) })
-  }, [user])
+    if (!targetUser?.id || !isConfigured) { setLoading(false); return }
+    supabase.from('profiles').select('*').eq('id', targetUser.id).single()
+      .then(({ data }) => {
+        if (data) setProfile(data)
+        setLoading(false)
+      })
+    if (visitUserId) {
+      supabase.auth.admin.getUserById(visitUserId).then(({ data }) => {
+        if (data?.user) setTargetEmail(data.user.email)
+      }).catch(() => {})
+    }
+  }, [targetUser?.id])
 
-  const name = profile?.display_name || user?.email?.split('@')[0] || 'Apprenant'
+  const name = profile?.display_name || targetEmail?.split('@')[0] || 'Apprenant'
   const completedDates = MODULES
     .map(m => getModuleProgress(m.id).completedAt)
     .filter(Boolean)
@@ -37,33 +51,54 @@ export default function Certificate() {
   const dateStr = completionDate.toLocaleDateString('fr-FR', {
     day: 'numeric', month: 'long', year: 'numeric'
   })
-  const id = certId(user?.id, completionDate)
+  const id = certId(targetUser?.id, completionDate)
+
+  const isPreview = !!visitUserId && isAdmin
+
+  if (loading) return (
+    <div className="flex justify-center py-32">
+      <span className="loading loading-spinner loading-lg text-primary" />
+    </div>
+  )
 
   return (
     <div className="max-w-4xl mx-auto py-32">
+      {isPreview && (
+        <div className="alert alert-info mb-6 no-print shadow-lg">
+          <span>👁️ Aperçu de l'attestation pour <strong>{name}</strong> {targetEmail && `(${targetEmail})`}</span>
+          <Link to="/admin/students" className="btn btn-sm btn-ghost">← Retour</Link>
+        </div>
+      )}
+
       {!allDone ? (
         <div className="card bg-base-200 border border-base-300 max-w-lg mx-auto text-center">
           <div className="card-body">
             <span className="text-5xl mb-2">🔒</span>
             <h2 className="text-2xl font-bold">Formation non terminée</h2>
             <p className="text-base-content/60 mt-2">
-              Vous devez compléter les <strong>{stats.total}</strong> modules pour obtenir votre attestation.
+              {isPreview ? (
+                <>Cet étudiant n'a pas encore complété tous les modules.</>
+              ) : (
+                <>Vous devez compléter les <strong>{stats.total}</strong> modules pour obtenir votre attestation.</>
+              )}
               <br />Progression : <strong>{stats.completed}/{stats.total}</strong> ({stats.percentage}%)
             </p>
             <progress className="progress progress-primary w-full mt-4" value={stats.completed} max={stats.total} />
-            <Link to="/curriculum" className="btn btn-primary mt-6">Continuer la formation</Link>
+            {!isPreview && <Link to="/curriculum" className="btn btn-primary mt-6">Continuer la formation</Link>}
           </div>
         </div>
       ) : (
         <>
           <div className="text-center mb-6 no-print">
-            <button onClick={() => window.print()} className="btn btn-primary btn-lg gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                <path fillRule="evenodd" d="M5 2.75C5 1.784 5.784 1 6.75 1h6.5c.966 0 1.75.784 1.75 1.75v3.552c.377.046.738.128 1.08.245a5.25 5.25 0 013.22 4.725H20v-2a.75.75 0 00-.75-.75h-1.25V7.974A.75.75 0 0017.25 7h-1.578a2.75 2.75 0 00-2.084-.878H6.412A2.75 2.75 0 004.328 7H2.75a.75.75 0 00-.75.75V10.5H.75a.75.75 0 000 1.5h1.25v3.8A2.75 2.75 0 004.75 18.5h10.5a2.75 2.75 0 002.75-2.75v-3.8h1.25a.75.75 0 000-1.5h-1.25V9.25a.75.75 0 00-.75-.75h-1.155A3.74 3.74 0 0018 11.25v4.5a.75.75 0 01-.75.75H2.75a.75.75 0 01-.75-.75v-4.5A3.74 3.74 0 014.905 8.5H4.25a.75.75 0 00-.75.75V12a.75.75 0 01-1.5 0V9.25a2.25 2.25 0 012.25-2.25h.75a3.74 3.74 0 012.905-1.378h6.19A3.74 3.74 0 0117 7h.75a2.25 2.25 0 012.25 2.25v3.75a.75.75 0 01-.75.75h-1.25v.75A3.74 3.74 0 0115.25 18H4.75A3.74 3.74 0 011 14.25z" />
-              </svg>
-              Imprimer / Télécharger PDF
-            </button>
-            <Link to="/profile" className="btn btn-ghost btn-lg ml-3">← Retour au profil</Link>
+            {!isPreview && (
+              <button onClick={() => window.print()} className="btn btn-primary btn-lg gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                  <path fillRule="evenodd" d="M5 2.75C5 1.784 5.784 1 6.75 1h6.5c.966 0 1.75.784 1.75 1.75v3.552c.377.046.738.128 1.08.245a5.25 5.25 0 013.22 4.725H20v-2a.75.75 0 00-.75-.75h-1.25V7.974A.75.75 0 0017.25 7h-1.578a2.75 2.75 0 00-2.084-.878H6.412A2.75 2.75 0 004.328 7H2.75a.75.75 0 00-.75.75V10.5H.75a.75.75 0 000 1.5h1.25v3.8A2.75 2.75 0 004.75 18.5h10.5a2.75 2.75 0 002.75-2.75v-3.8h1.25a.75.75 0 000-1.5h-1.25V9.25a.75.75 0 00-.75-.75h-1.155A3.74 3.74 0 0018 11.25v4.5a.75.75 0 01-.75.75H2.75a.75.75 0 01-.75-.75v-4.5A3.74 3.74 0 014.905 8.5H4.25a.75.75 0 00-.75.75V12a.75.75 0 01-1.5 0V9.25a2.25 2.25 0 012.25-2.25h.75a3.74 3.74 0 012.905-1.378h6.19A3.74 3.74 0 0117 7h.75a2.25 2.25 0 012.25 2.25v3.75a.75.75 0 01-.75.75h-1.25v.75A3.74 3.74 0 0115.25 18H4.75A3.74 3.74 0 011 14.25z" />
+                </svg>
+                Imprimer / Télécharger PDF
+              </button>
+            )}
+            <Link to={isPreview ? "/admin/students" : "/profile"} className="btn btn-ghost btn-lg ml-3">← Retour</Link>
           </div>
 
           <div id="certificate" className="bg-white text-gray-900 rounded-2xl shadow-2xl overflow-hidden border border-gray-200">

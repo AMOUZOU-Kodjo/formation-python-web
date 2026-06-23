@@ -46,6 +46,7 @@ export default function AdminStudents() {
               <th>Email</th>
               <th>Progression</th>
               <th>Quiz</th>
+              <th>Attestation</th>
               <th>Inscrit le</th>
             </tr>
           </thead>
@@ -78,6 +79,15 @@ export default function AdminStudents() {
                     </div>
                   </td>
                   <td className="text-sm">{quizCount}</td>
+                  <td>
+                    {completed === MODULES.length ? (
+                      <Link to={`/certificate?userId=${s.id}`} className="btn btn-success btn-xs gap-1">
+                        🏆 Voir
+                      </Link>
+                    ) : (
+                      <span className="text-xs text-base-content/30">—</span>
+                    )}
+                  </td>
                   <td className="text-xs text-base-content/40">{new Date(s.created_at).toLocaleDateString('fr-FR')}</td>
                 </tr>
               )
