@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bannières YouTube - Formation Python</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #0f0f0f;
+    color: #fff;
+    padding: 30px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #8b5cf6, #34d399);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 40px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .card:hover {
+    transform: scale(1.02);
+    border-color: rgba(255,255,255,0.3);
+  }
+  .card .badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .card .icon {
+    font-size: 52px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  }
+  .card .num {
+    font-size: 14px;
+    font-weight: 700;
+    opacity: 0.8;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .card h2 {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+    max-width: 90%;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  .card .duration {
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 6px;
+  }
+  .card .brand {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    font-size: 10px;
+    font-weight: 700;
+    opacity: 0.4;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+  .card .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+  }
+
+  /* Part colors */
+  .part-1 { background: linear-gradient(135deg, #1a237e 0%, #4CAF50 50%, #1b5e20 100%); }
+  .part-2 { background: linear-gradient(135deg, #1a237e 0%, #FF9800 50%, #bf360c 100%); }
+  .part-3 { background: linear-gradient(135deg, #1a237e 0%, #9C27B0 50%, #4a148c 100%); }
+  .part-4 { background: linear-gradient(135deg, #1a237e 0%, #D32F2F 50%, #b71c1c 100%); }
+
+  .part-1 .num { color: #81c784; }
+  .part-2 .num { color: #ffb74d; }
+  .part-3 .num { color: #ce93d8; }
+  .part-4 .num { color: #ef9a9a; }
+
+  /* Selected view */
+  .viewer {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+  }
+  .viewer.active { display: flex; }
+  .viewer img { max-width: 90vw; max-height: 90vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+  .viewer .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 36px;
+    color: #fff;
+    cursor: pointer;
+    opacity: 0.6;
+  }
+  .viewer .close:hover { opacity: 1; }
+
+  @media (min-width: 768px) {
+    .card .icon { font-size: 64px; }
+    .card h2 { font-size: 20px; }
+    .card .badge { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>🐍 Formation Python</h1>
+<p class="subtitle">Bannières YouTube professionnelles — 36 modules • Cliquez sur une carte pour voir en grand</p>
+
+<div class="grid" id="grid"></div>
+
+<div class="viewer" id="viewer" onclick="closeViewer(event)">
+  <span class="close" onclick="document.getElementById('viewer').classList.remove('active')">&times;</span>
+  <div id="viewerContent"></div>
+</div>
+
+<script>
+const modules = [
+  { id: "01", title: "Introduction à Python", icon: "🐍", part: 1, duration: "2h", short: "Introduction" },
+  { id: "02", title: "Variables, types et opérateurs", icon: "🔢", part: 1, duration: "2h", short: "Variables & Types" },
+  { id: "03", title: "Chaînes de caractères", icon: "📝", part: 1, duration: "2h", short: "Strings" },
+  { id: "04", title: "Listes et tuples", icon: "📋", part: 1, duration: "2h", short: "Listes & Tuples" },
+  { id: "05", title: "Dictionnaires et ensembles", icon: "🗂️", part: 1, duration: "2h", short: "Dicts & Sets" },
+  { id: "06", title: "Contrôle de flux", icon: "🔀", part: 1, duration: "2h", short: "Contrôle de flux" },
+  { id: "07", title: "Boucles", icon: "🔄", part: 1, duration: "2h", short: "Boucles" },
+  { id: "08", title: "Fonctions", icon: "⚙️", part: 1, duration: "3h", short: "Fonctions" },
+  { id: "09", title: "Compréhensions", icon: "💡", part: 1, duration: "2h", short: "Compréhensions" },
+  { id: "10", title: "Gestion des erreurs", icon: "🛡️", part: 1, duration: "2h", short: "Exceptions" },
+  { id: "11", title: "Modules et packages", icon: "📦", part: 2, duration: "2h", short: "Modules" },
+  { id: "12", title: "Fichiers", icon: "📁", part: 2, duration: "2h", short: "Fichiers" },
+  { id: "13", title: "POO — Classes", icon: "🏛️", part: 2, duration: "3h", short: "Classes" },
+  { id: "14", title: "Héritage et polymorphisme", icon: "🧬", part: 2, duration: "3h", short: "Héritage" },
+  { id: "15", title: "Méthodes spéciales", icon: "✨", part: 2, duration: "2h", short: "Dunder methods" },
+  { id: "16", title: "Itérateurs et générateurs", icon: "⏳", part: 2, duration: "2h", short: "Itérateurs" },
+  { id: "17", title: "Décorateurs", icon: "🎀", part: 2, duration: "2h", short: "Décorateurs" },
+  { id: "18", title: "Context managers", icon: "📎", part: 2, duration: "2h", short: "Context managers" },
+  { id: "19", title: "Bibliothèque standard", icon: "📚", part: 3, duration: "3h", short: "Biblio standard" },
+  { id: "20", title: "Expressions régulières", icon: "🔍", part: 3, duration: "3h", short: "Regex" },
+  { id: "21", title: "Programmation fonctionnelle", icon: "λ", part: 3, duration: "2h", short: "Fonctionnelle" },
+  { id: "22", title: "Type hints", icon: "🏷️", part: 3, duration: "2h", short: "Typage" },
+  { id: "23", title: "Async / Await", icon: "⚡", part: 3, duration: "3h", short: "Async" },
+  { id: "24", title: "Threading & Multiprocess", icon: "🧵", part: 3, duration: "3h", short: "Threading" },
+  { id: "25", title: "Métaclasses & Introspection", icon: "🪞", part: 4, duration: "3h", short: "Métaclasses" },
+  { id: "26", title: "Design patterns", icon: "🏗️", part: 4, duration: "3h", short: "Patterns" },
+  { id: "27", title: "Tests unitaires", icon: "🧪", part: 4, duration: "3h", short: "Tests" },
+  { id: "28", title: "Logging & Debugging", icon: "🐛", part: 4, duration: "2h", short: "Logging" },
+  { id: "29", title: "Environnements virtuels", icon: "📦", part: 4, duration: "2h", short: "Venv" },
+  { id: "30", title: "Packaging et distribution", icon: "📤", part: 4, duration: "2h", short: "Packaging" },
+  { id: "31", title: "API REST avec FastAPI", icon: "🌐", part: 4, duration: "4h", short: "API REST" },
+  { id: "32", title: "Bases de données", icon: "🗄️", part: 4, duration: "3h", short: "Bases de données" },
+  { id: "33", title: "Web scraping", icon: "🕸️", part: 4, duration: "3h", short: "Web scraping" },
+  { id: "34", title: "Introduction à la data science", icon: "📊", part: 4, duration: "4h", short: "Data science" },
+  { id: "35", title: "Visualisation de données", icon: "📈", part: 4, duration: "3h", short: "Visualisation" },
+  { id: "36", title: "Projet final", icon: "🏆", part: 4, duration: "6h", short: "Projet final" },
+];
+
+const partLabels = { 1: "Les Fondamentaux", 2: "Intermédiaire", 3: "Avancé", 4: "Expert" };
+
+const grid = document.getElementById('grid');
+modules.forEach(m => {
+  const card = document.createElement('div');
+  card.className = `card part-${m.part}`;
+  card.innerHTML = `
+    <div class="overlay"></div>
+    <span class="badge">Partie ${m.part} • ${partLabels[m.part]}</span>
+    <div class="icon">${m.icon}</div>
+    <div class="num">MODULE ${m.id}</div>
+    <h2>${m.title}</h2>
+    <div class="duration">${m.duration}</div>
+    <div class="brand">FORMATION PYTHON</div>
+  `;
+  card.onclick = () => openViewer(m);
+  grid.appendChild(card);
+});
+
+function openViewer(m) {
+  const v = document.getElementById('viewer');
+  const c = document.getElementById('viewerContent');
+  c.innerHTML = `<div class="card part-${m.part}" style="width: 640px; height: 360px; cursor: default;">
+    <div class="overlay"></div>
+    <span class="badge">Partie ${m.part} • ${partLabels[m.part]}</span>
+    <div class="icon">${m.icon}</div>
+    <div class="num">MODULE ${m.id}</div>
+    <h2>${m.title}</h2>
+    <div class="duration">${m.duration}</div>
+    <div class="brand">FORMATION PYTHON</div>
+  </div>`;
+  v.classList.add('active');
+}
+
+function closeViewer(e) {
+  if (e.target === e.currentTarget) {
+    document.getElementById('viewer').classList.remove('active');
+  }
+}
+</script>
+
+</body>
+</html>
