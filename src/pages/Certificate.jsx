@@ -91,7 +91,8 @@ export default function Certificate() {
         <>
           <div className="text-center mb-6 no-print">
             {!isPreview && (
-              <button onClick={() => window.print()} className="btn btn-primary btn-lg gap-2">
+              <button onClick={() => window.print()} className="btn btn-lg gap-2 text-white"
+                      style={{background: '#306998'}}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                   <path fillRule="evenodd" d="M5 2.75C5 1.784 5.784 1 6.75 1h6.5c.966 0 1.75.784 1.75 1.75v3.552c.377.046.738.128 1.08.245a5.25 5.25 0 013.22 4.725H20v-2a.75.75 0 00-.75-.75h-1.25V7.974A.75.75 0 0017.25 7h-1.578a2.75 2.75 0 00-2.084-.878H6.412A2.75 2.75 0 004.328 7H2.75a.75.75 0 00-.75.75V10.5H.75a.75.75 0 000 1.5h1.25v3.8A2.75 2.75 0 004.75 18.5h10.5a2.75 2.75 0 002.75-2.75v-3.8h1.25a.75.75 0 000-1.5h-1.25V9.25a.75.75 0 00-.75-.75h-1.155A3.74 3.74 0 0018 11.25v4.5a.75.75 0 01-.75.75H2.75a.75.75 0 01-.75-.75v-4.5A3.74 3.74 0 014.905 8.5H4.25a.75.75 0 00-.75.75V12a.75.75 0 01-1.5 0V9.25a2.25 2.25 0 012.25-2.25h.75a3.74 3.74 0 012.905-1.378h6.19A3.74 3.74 0 0117 7h.75a2.25 2.25 0 012.25 2.25v3.75a.75.75 0 01-.75.75h-1.25v.75A3.74 3.74 0 0115.25 18H4.75A3.74 3.74 0 011 14.25z" />
                 </svg>
@@ -101,66 +102,91 @@ export default function Certificate() {
             <Link to={isPreview ? "/admin/students" : "/profile"} className="btn btn-ghost btn-lg ml-3">← Retour</Link>
           </div>
 
-          <div id="certificate" className="bg-white text-gray-900 rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
-            <div className="h-2 bg-gradient-to-r from-purple-600 via-green-500 to-purple-600" />
+          <div id="certificate" className="relative bg-white overflow-hidden">
+            {/* Bordures */}
+            <div className="border-[12px] border-[#306998] m-3">
+              <div className="border-[3px] border-[#FFE873] m-1">
+                <div className="border border-gray-200 m-1 p-8 md:p-12 text-center relative">
 
-            <div className="px-12 py-10 text-center">
-              <div className="flex justify-between items-start mb-8">
-                <div className="text-left">
-                  <p className="text-xs text-gray-400 uppercase tracking-widest">Certificat n° {id}</p>
-                </div>
-                <div className="text-right">
-                  <span className="text-3xl">🐍</span>
-                </div>
-              </div>
+                  {/* Filigrane */}
+                  <img src="/images/python-logo.png" alt=""
+                       className="absolute opacity-[0.04] pointer-events-none"
+                       style={{width: '500px', top: '50%', left: '50%', transform: 'translate(-50%,-50%)'}} />
 
-              <div className="border-2 border-gray-200 rounded-xl p-8 mb-8">
-                <p className="text-sm uppercase tracking-widest text-gray-400 mb-2">Attestation de fin de formation</p>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">FORMATION COMPLÈTE PYTHON</h1>
-                <p className="text-gray-500 text-sm mb-6">Du débutant à l'expert — 36 modules</p>
-
-                <div className="w-24 h-0.5 bg-purple-600 mx-auto mb-6" />
-
-                <p className="text-gray-600 text-lg mb-2">Je soussigné, formateur, certifie que</p>
-                <p className="text-4xl font-bold text-purple-700 my-4">{name}</p>
-                <p className="text-gray-600 text-lg mb-2">a complété avec succès l'intégralité de la formation</p>
-                <p className="text-xl font-semibold text-gray-800 mb-6">« Programmation Python — Du débutant à l'expert »</p>
-
-                <div className="flex justify-center gap-8 my-6">
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
-                    <p className="text-xs text-gray-500">Modules complétés</p>
+                  {/* En-tête */}
+                  <div className="flex justify-between items-start mb-6">
+                    <p className="text-[10px] md:text-xs text-gray-400 uppercase tracking-widest">Certificat n° {id}</p>
+                    <img src="/images/python-logo.png" alt="Python" className="h-10 md:h-14 w-auto" />
                   </div>
-                  <div className="w-px bg-gray-200" />
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-gray-900">90+</p>
-                    <p className="text-xs text-gray-500">Heures de formation</p>
-                  </div>
-                  <div className="w-px bg-gray-200" />
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-gray-900">4</p>
-                    <p className="text-xs text-gray-500">Parties couvertes</p>
-                  </div>
-                </div>
 
-                <p className="text-gray-500 text-sm mt-4">
-                  Délivré le <strong>{dateStr}</strong>
-                </p>
-              </div>
+                  {/* Titre */}
+                  <p className="text-[10px] md:text-sm uppercase tracking-widest text-gray-400 mb-1">
+                    Attestation de réussite
+                  </p>
+                  <h1 className="text-xl md:text-3xl font-bold text-[#1E1E1E] mb-1">
+                    ATTESTATION DE RÉUSSITE
+                  </h1>
+                  <p className="text-xs md:text-base text-gray-500 mb-4">
+                    Cette attestation professionnelle est décernée à :
+                  </p>
 
-              <div className="flex justify-between items-end mt-8">
-                <div className="text-left">
-                  <div className="w-48 h-0.5 bg-gray-300 mb-1" />
-                  <p className="text-xs text-gray-400">Signature du formateur</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs text-gray-400">Formation Python</p>
-                  <p className="text-xs text-gray-400">{new Date().getFullYear()}</p>
+                  {/* Nom */}
+                  <p className="text-2xl md:text-4xl font-bold text-[#306998] my-4 uppercase">
+                    {name}
+                  </p>
+                  <div className="w-48 h-[3px] bg-[#FFE873] mx-auto mb-4" />
+
+                  {/* Corps */}
+                  <p className="text-xs md:text-base text-gray-600 mb-1">
+                    Pour avoir suivi avec succès et validé l'ensemble des modules requis de la formation :
+                  </p>
+                  <p className="text-sm md:text-xl font-semibold text-gray-800 italic mb-3">
+                    « Formation Complète Python — Du débutant à l'expert »
+                  </p>
+                  <p className="text-xs md:text-sm text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                    Variables, types, structures de contrôle, fonctions, POO, héritage, décorateurs,
+                    async/await, bases de données, API REST, data science, visualisation et projet final.
+                  </p>
+
+                  {/* Statistiques */}
+                  <div className="flex justify-center gap-4 md:gap-12 my-6 md:my-8">
+                    <div className="text-center">
+                      <p className="text-xl md:text-3xl font-bold text-[#306998]">{stats.total}</p>
+                      <p className="text-[10px] md:text-xs text-gray-500">Modules complétés</p>
+                    </div>
+                    <div className="w-px bg-gray-200" />
+                    <div className="text-center">
+                      <p className="text-xl md:text-3xl font-bold text-[#306998]">90+</p>
+                      <p className="text-[10px] md:text-xs text-gray-500">Heures de formation</p>
+                    </div>
+                    <div className="w-px bg-gray-200" />
+                    <div className="text-center">
+                      <p className="text-xl md:text-3xl font-bold text-[#306998]">4</p>
+                      <p className="text-[10px] md:text-xs text-gray-500">Parties couvertes</p>
+                    </div>
+                  </div>
+
+                  <p className="text-xs md:text-sm text-gray-500">
+                    Délivré le <strong>{dateStr}</strong>
+                  </p>
+
+                  {/* Signature */}
+                  <div className="flex justify-between items-end mt-8 md:mt-10">
+                    <div className="text-left">
+                      <div className="w-32 md:w-44 h-0.5 bg-gray-300 mb-1" />
+                      <p className="text-[10px] md:text-xs text-gray-400">Signature du formateur</p>
+                    </div>
+                    <div className="text-right flex flex-col items-center gap-1">
+                      <img src="/images/210192671.png" alt="Formateur"
+                           className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-[#306998]" />
+                      <p className="text-[10px] md:text-xs text-gray-400">Le Formateur</p>
+                      <p className="text-[9px] md:text-[10px] text-gray-400">Python Expert — Formation Complète</p>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
-
-            <div className="h-2 bg-gradient-to-r from-purple-600 via-green-500 to-purple-600" />
           </div>
 
           <div className="text-center mt-4 no-print">

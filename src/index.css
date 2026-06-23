@@ -20,6 +20,7 @@
     box-shadow: none !important;
     border: none !important;
   }
-  #certificate .h-2 { display: block !important; }
-  @page { margin: 0.5in; size: A4 portrait; }
+  #certificate .border-\[12px\] { border-width: 12px !important; }
+  #certificate .border-\[3px\] { border-width: 3px !important; }
+  @page { margin: 0.3in; size: A4 landscape; }
 }
