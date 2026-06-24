@@ -11,6 +11,10 @@ const NAV = [
   { path: '/progress', label: 'Progression', icon: '📊' },
 ]
 
+const EXTERNAL_LINKS = [
+  { href: 'https://savoirbox.vercel.app/cours-python', label: 'Cours Python (PDF)', icon: '📄' },
+]
+
 export default function Layout({ children }) {
   const [sidebar, setSidebar] = useState(false)
   const [selectedPart, setSelectedPart] = useState(null)
@@ -141,6 +145,15 @@ export default function Layout({ children }) {
                 </Link>
               </li>
             )}
+            <li className="menu-title text-xs text-base-content/30 mt-2"><span>RESSOURCES</span></li>
+            {EXTERNAL_LINKS.map(link => (
+              <li key={link.href}>
+                <a href={link.href} target="_blank" rel="noopener noreferrer"
+                  className="gap-2" onClick={() => setSidebar(false)}>
+                  {link.icon} {link.label}
+                </a>
+              </li>
+            ))}
           </ul>
 
           {isConfigured && (user ? (
