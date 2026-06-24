@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async'
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getModule, EXERCISES } from '../data/modules'
 import { useAuth } from '../contexts/AuthContext'

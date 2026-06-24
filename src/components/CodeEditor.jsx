@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { EditorView, basicSetup } from 'codemirror'
 import { EditorState } from '@codemirror/state'
 import { python } from '@codemirror/lang-python'

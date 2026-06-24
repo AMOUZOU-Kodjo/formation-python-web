@@ -108,7 +108,7 @@ export default function Home() {
         <div className="grid md:grid-cols-2 gap-4">
           {PARTS.map(part => {
             const mods = MODULES.filter(m => m.part === part.id)
-            const completed = user ? MODULES.filter(m => m.part === part.id && stats.completed).length : 0
+            const completed = user ? MODULES.filter(m => m.part === part.id && stats.moduleDetails?.[m.id]?.completed).length : 0
             return (
               <Link key={part.id} to="/curriculum" className="no-underline group">
                 <div className="card bg-base-200 border border-base-300 hover:border-primary/40 transition-all duration-300 h-full">
