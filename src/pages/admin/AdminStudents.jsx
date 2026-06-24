@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
@@ -32,7 +33,11 @@ export default function AdminStudents() {
     </div>
   )
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Étudiants — Admin | Formation Python</title>
+      <meta name="description" content="Gestion des étudiants inscrits à la formation Python." />
+    </Helmet>
     <div className="max-w-6xl mx-auto">
       <Link to="/admin" className="link link-primary text-sm no-underline mb-4 inline-block">← Retour</Link>
       <h1 className="text-3xl font-extrabold mb-1">👥 Étudiants</h1>
@@ -106,5 +111,5 @@ export default function AdminStudents() {
         </div>
       )}
     </div>
-  )
+  </>)
 }

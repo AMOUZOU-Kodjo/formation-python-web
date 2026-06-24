@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { MODULES, PARTS } from '../../data/modules'
@@ -33,7 +34,11 @@ export default function AdminCourses() {
   const modsByPart = {}
   PARTS.forEach(p => { modsByPart[p.id] = MODULES.filter(m => m.part === p.id) })
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Gestion des Modules — Admin | Formation Python</title>
+      <meta name="description" content="Administration des modules et contenu de la formation Python." />
+    </Helmet>
     <div className="max-w-6xl mx-auto">
       <Link to="/admin" className="link link-primary text-sm no-underline mb-4 inline-block">← Retour</Link>
       <h1 className="text-3xl font-extrabold mb-1">📚 Gestion des cours</h1>
@@ -107,5 +112,6 @@ export default function AdminCourses() {
         </div>
       </div>
     </div>
+    </>
   )
 }

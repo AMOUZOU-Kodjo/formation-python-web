@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
@@ -21,7 +22,11 @@ export default function AdminDashboard() {
     { label: 'Quiz soumis', value: '—', icon: '📝', grad: 'from-amber-500 to-orange-600' },
   ]
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Tableau de Bord Admin | Formation Python</title>
+      <meta name="description" content="Panneau d'administration de la formation Python." />
+    </Helmet>
     <div className="max-w-6xl mx-auto">
       <h1 className="text-3xl font-extrabold mb-1">
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-emerald-400">
@@ -92,5 +97,6 @@ export default function AdminDashboard() {
         </div>
       )}
     </div>
+    </>
   )
 }

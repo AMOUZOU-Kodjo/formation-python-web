@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { MODULES, PARTS } from '../data/modules'
 import { useProgress } from '../hooks/useProgress'
@@ -15,7 +16,11 @@ export default function Progress() {
   const pct = overall.percentage
   const ringColor = pct >= 80 ? 'stroke-success' : pct >= 40 ? 'stroke-warning' : 'stroke-error'
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Ma Progression | Formation Python</title>
+      <meta name="description" content="Suivez votre progression dans la formation Python : modules complétés, quiz réussis, exercices validés." />
+    </Helmet>
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-base-200 to-base-300 border border-base-300 mb-8 px-6 md:px-12 py-10 text-center">
@@ -164,5 +169,6 @@ export default function Progress() {
         </div>
       )}
     </div>
+    </>
   )
 }

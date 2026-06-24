@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { MODULES, PARTS } from '../data/modules'
 import { useAuth } from '../contexts/AuthContext'
@@ -21,7 +22,11 @@ export default function Home() {
   const { getOverallProgress } = useProgress(user)
   const stats = getOverallProgress(MODULES.length)
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Formation Python Complète — Du débutant à l'expert | 36 modules</title>
+      <meta name="description" content="Formation Python complète et progressive : 36 modules, 4 parties, de zéro jusqu'à la maîtrise. Apprenez Python avec des cours, exercices et projets." />
+    </Helmet>
     <div className="max-w-6xl mx-auto">
       {/* Hero */}
       <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-base-200 to-base-300 border border-base-300 mb-10">
@@ -141,5 +146,6 @@ export default function Home() {
         </section>
       )}
     </div>
+    </>
   )
 }

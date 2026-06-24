@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getModule, EXERCISES } from '../data/modules'
@@ -72,7 +73,11 @@ export default function Exercise() {
     }, 400)
   }
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Exercice : {mod?.title || 'Module'} | Formation Python</title>
+      <meta name="description" content={`Exercice pratique du module ${moduleId} — Formation Python.`} />
+    </Helmet>
     <div className="max-w-6xl mx-auto">
       <Link to={`/module/${moduleId}`} className="link link-primary text-sm no-underline">← Retour au cours</Link>
       <div className="flex items-center justify-between mt-3 mb-6">
@@ -145,5 +150,6 @@ export default function Exercise() {
         </a>
       </div>
     </div>
+    </>
   )
 }

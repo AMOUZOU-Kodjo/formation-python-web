@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
@@ -51,7 +52,11 @@ export default function Signup() {
     )
   }
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Inscription | Formation Python</title>
+      <meta name="description" content="Inscrivez-vous pour suivre la formation Python complète de 36 modules avec suivi de progression." />
+    </Helmet>
     <div className="hero min-h-80">
       <div className="hero-content w-full max-w-sm">
         <div className="card bg-base-200 border border-base-300 w-full">
@@ -82,5 +87,6 @@ export default function Signup() {
         </div>
       </div>
     </div>
+    </>
   )
 }

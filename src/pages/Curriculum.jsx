@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { MODULES, PARTS } from '../data/modules'
 import { useProgress } from '../hooks/useProgress'
@@ -8,7 +9,11 @@ export default function Curriculum() {
   const { getModuleProgress, getOverallProgress } = useProgress(user)
   const overall = getOverallProgress(MODULES.length)
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Programme Pédagogique | Formation Python</title>
+      <meta name="description" content="Découvrez le programme complet des 36 modules de la formation Python : variables, POO, async, data science, API REST et projet final." />
+    </Helmet>
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-base-200 to-base-300 border border-base-300 mb-8 px-6 md:px-12 py-10 text-center">
@@ -104,5 +109,6 @@ export default function Curriculum() {
         })}
       </div>
     </div>
+    </>
   )
 }

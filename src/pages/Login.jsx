@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
@@ -40,7 +41,11 @@ export default function Login() {
     )
   }
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Connexion | Formation Python</title>
+      <meta name="description" content="Connectez-vous à votre compte pour accéder à la formation Python complète." />
+    </Helmet>
     <div className="hero min-h-80">
       <div className="hero-content w-full max-w-sm">
         <div className="card bg-base-200 border border-base-300 w-full">
@@ -67,5 +72,6 @@ export default function Login() {
         </div>
       </div>
     </div>
+    </>
   )
 }

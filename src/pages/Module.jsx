@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
@@ -69,7 +70,11 @@ export default function ModulePage() {
     a: ({ href, children }) => <a href={href} className="link link-primary" target="_blank" rel="noopener noreferrer">{children}</a>,
   }
 
-  return (
+  return (<>
+    <Helmet>
+      <title>{mod?.title || 'Module'} | Formation Python</title>
+      <meta name="description" content={`Module ${mod?.id?.replace('-', ' ')} : ${mod?.title || ''} — Formation Python complète.`} />
+    </Helmet>
     <div className="max-w-8xl mx-auto">
       <div className="mb-4">
         <Link to="/curriculum" className="link link-primary text-sm no-underline">← Retour au programme</Link>
@@ -133,5 +138,6 @@ export default function ModulePage() {
         ) : <div />}
       </div>
     </div>
+    </>
   )
 }

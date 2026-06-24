@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
@@ -61,7 +62,11 @@ export default function Certificate() {
     </div>
   )
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Mon Attestation | Formation Python</title>
+      <meta name="description" content="Attestation de réussite de la formation Python complète — 36 modules validés." />
+    </Helmet>
     <div className="max-w-4xl mx-auto py-32">
       {isPreview && (
         <div className="alert alert-info mb-6 no-print shadow-lg">
@@ -197,5 +202,6 @@ export default function Certificate() {
         </>
       )}
     </div>
+    </>
   )
 }

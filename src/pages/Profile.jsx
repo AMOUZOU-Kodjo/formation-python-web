@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
@@ -65,7 +66,11 @@ export default function Profile() {
 
   const initial = (profile?.display_name || user?.email || '?').charAt(0).toUpperCase()
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Mon Profil | Formation Python</title>
+      <meta name="description" content="Gérez votre profil, votre avatar et suivez votre progression dans la formation Python." />
+    </Helmet>
     <div className="max-w-3xl mx-auto py-32 items-center">
       <div className="card bg-base-200 border border-base-300 overflow-hidden">
         <div className="h-32 bg-gradient-to-r from-primary to-secondary opacity-80" />
@@ -190,5 +195,6 @@ export default function Profile() {
         </div>
       )}
     </div>
+    </>
   )
 }

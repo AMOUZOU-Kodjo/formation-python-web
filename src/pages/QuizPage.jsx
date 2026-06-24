@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import { useParams, Link } from 'react-router-dom'
 import { getModule, QUIZZES } from '../data/modules'
 import { useProgress } from '../hooks/useProgress'
@@ -25,7 +26,11 @@ export default function QuizPage() {
     )
   }
 
-  return (
+  return (<>
+    <Helmet>
+      <title>Quiz : {mod?.title || 'Module'} | Formation Python</title>
+      <meta name="description" content={`Quiz du module ${moduleId} — Testez vos connaissances Python.`} />
+    </Helmet>
     <div className="max-w-8xl mx-auto">
       <Link to={`/module/${moduleId}`} className="link link-primary text-sm no-underline">← Retour au cours</Link>
       <h1 className="text-2xl font-bold mt-3 mb-1">📝 Quiz : {mod.title}</h1>
@@ -39,5 +44,6 @@ export default function QuizPage() {
 
       <Quiz questions={questions} onComplete={(score) => markQuizScore(moduleId, score)} />
     </div>
+    </>
   )
 }
