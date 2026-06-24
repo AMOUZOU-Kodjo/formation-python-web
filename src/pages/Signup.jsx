@@ -25,7 +25,7 @@ export default function Signup() {
 
   if (!isConfigured) {
     return (
-      <div className="hero min-h-60">
+      <div className="hero min-h-[calc(100vh-10rem)]">
         <div className="hero-content text-center">
           <div>
             <h2 className="text-2xl font-bold mb-2">🔧 Configuration requise</h2>
@@ -39,7 +39,7 @@ export default function Signup() {
 
   if (success) {
     return (
-      <div className="hero min-h-60">
+      <div className="hero min-h-[calc(100vh-10rem)]">
         <div className="hero-content text-center">
           <div>
             <div className="text-5xl mb-4">📧</div>
@@ -57,7 +57,7 @@ export default function Signup() {
       <title>Inscription | Formation Python</title>
       <meta name="description" content="Inscrivez-vous pour suivre la formation Python complète de 36 modules avec suivi de progression." />
     </Helmet>
-    <div className="hero min-h-80">
+    <div className="hero min-h-[calc(100vh-10rem)]">
       <div className="hero-content w-full max-w-sm">
         <div className="card bg-base-200 border border-base-300 w-full">
           <div className="card-body">

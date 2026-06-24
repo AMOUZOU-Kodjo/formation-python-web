@@ -25,7 +25,7 @@ export default function Login() {
 
   if (!isConfigured) {
     return (
-      <div className="hero min-h-60">
+      <div className="hero min-h-[calc(100vh-10rem)]">
         <div className="hero-content text-center">
           <div>
             <h2 className="text-2xl font-bold mb-2">🔧 Configuration requise</h2>
@@ -46,7 +46,7 @@ export default function Login() {
       <title>Connexion | Formation Python</title>
       <meta name="description" content="Connectez-vous à votre compte pour accéder à la formation Python complète." />
     </Helmet>
-    <div className="hero min-h-80">
+    <div className="hero min-h-[calc(100vh-10rem)]">
       <div className="hero-content w-full max-w-sm">
         <div className="card bg-base-200 border border-base-300 w-full">
           <div className="card-body">
