@@ -75,39 +75,38 @@ export default function Certificate() {
         </div>
       )}
 
-      {!allDone ? (
-        <div className="card bg-base-200 border border-base-300 max-w-lg mx-auto text-center">
-          <div className="card-body">
-            <span className="text-5xl mb-2">🔒</span>
-            <h2 className="text-2xl font-bold">Formation non terminée</h2>
-            <p className="text-base-content/60 mt-2">
-              {isPreview ? (
-                <>Cet étudiant n'a pas encore complété tous les modules.</>
-              ) : (
-                <>Vous devez compléter les <strong>{stats.total}</strong> modules pour obtenir votre attestation.</>
-              )}
-              <br />Progression : <strong>{stats.completed}/{stats.total}</strong> ({stats.percentage}%)
-            </p>
-            <progress className="progress progress-primary w-full mt-4" value={stats.completed} max={stats.total} />
-            {!isPreview && <Link to="/curriculum" className="btn btn-primary mt-6">Continuer la formation</Link>}
-          </div>
+      {!allDone && !isPreview && (
+        <div className="alert alert-warning mb-6 no-print shadow-lg max-w-lg mx-auto">
+          <span>🔒 Complétez les <strong>{stats.total}</strong> modules pour débloquer le téléchargement.</span>
+          <Link to="/curriculum" className="btn btn-sm btn-ghost">Continuer</Link>
         </div>
-      ) : (
-        <>
-          <div className="text-center mb-6 no-print">
-            {!isPreview && (
-              <button onClick={() => window.print()} className="btn btn-lg gap-2 text-white"
-                      style={{background: '#306998'}}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                  <path fillRule="evenodd" d="M5 2.75C5 1.784 5.784 1 6.75 1h6.5c.966 0 1.75.784 1.75 1.75v3.552c.377.046.738.128 1.08.245a5.25 5.25 0 013.22 4.725H20v-2a.75.75 0 00-.75-.75h-1.25V7.974A.75.75 0 0017.25 7h-1.578a2.75 2.75 0 00-2.084-.878H6.412A2.75 2.75 0 004.328 7H2.75a.75.75 0 00-.75.75V10.5H.75a.75.75 0 000 1.5h1.25v3.8A2.75 2.75 0 004.75 18.5h10.5a2.75 2.75 0 002.75-2.75v-3.8h1.25a.75.75 0 000-1.5h-1.25V9.25a.75.75 0 00-.75-.75h-1.155A3.74 3.74 0 0018 11.25v4.5a.75.75 0 01-.75.75H2.75a.75.75 0 01-.75-.75v-4.5A3.74 3.74 0 014.905 8.5H4.25a.75.75 0 00-.75.75V12a.75.75 0 01-1.5 0V9.25a2.25 2.25 0 012.25-2.25h.75a3.74 3.74 0 012.905-1.378h6.19A3.74 3.74 0 0117 7h.75a2.25 2.25 0 012.25 2.25v3.75a.75.75 0 01-.75.75h-1.25v.75A3.74 3.74 0 0115.25 18H4.75A3.74 3.74 0 011 14.25z" />
-                </svg>
-                Imprimer / Télécharger PDF
-              </button>
-            )}
-            <Link to={isPreview ? "/admin/students" : "/profile"} className="btn btn-ghost btn-lg ml-3">← Retour</Link>
-          </div>
+      )}
 
-          <div id="certificate" className="relative bg-white overflow-hidden">
+      <div className="text-center mb-6 no-print">
+        {allDone && !isPreview && (
+          <button onClick={() => window.print()} className="btn btn-lg gap-2 text-white"
+                  style={{background: '#306998'}}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+              <path fillRule="evenodd" d="M5 2.75C5 1.784 5.784 1 6.75 1h6.5c.966 0 1.75.784 1.75 1.75v3.552c.377.046.738.128 1.08.245a5.25 5.25 0 013.22 4.725H20v-2a.75.75 0 00-.75-.75h-1.25V7.974A.75.75 0 0017.25 7h-1.578a2.75 2.75 0 00-2.084-.878H6.412A2.75 2.75 0 004.328 7H2.75a.75.75 0 00-.75.75V10.5H.75a.75.75 0 000 1.5h1.25v3.8A2.75 2.75 0 004.75 18.5h10.5a2.75 2.75 0 002.75-2.75v-3.8h1.25a.75.75 0 000-1.5h-1.25V9.25a.75.75 0 00-.75-.75h-1.155A3.74 3.74 0 0018 11.25v4.5a.75.75 0 01-.75.75H2.75a.75.75 0 01-.75-.75v-4.5A3.74 3.74 0 014.905 8.5H4.25a.75.75 0 00-.75.75V12a.75.75 0 01-1.5 0V9.25a2.25 2.25 0 012.25-2.25h.75a3.74 3.74 0 012.905-1.378h6.19A3.74 3.74 0 0117 7h.75a2.25 2.25 0 012.25 2.25v3.75a.75.75 0 01-.75.75h-1.25v.75A3.74 3.74 0 0115.25 18H4.75A3.74 3.74 0 011 14.25z" />
+            </svg>
+            Imprimer / Télécharger PDF
+          </button>
+        )}
+        <Link to={isPreview ? "/admin/students" : "/profile"} className="btn btn-ghost btn-lg ml-3">← Retour</Link>
+      </div>
+
+      <div className="relative">
+        {!allDone && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70 rounded-2xl backdrop-blur-[2px] no-print">
+            <div className="text-center">
+              <span className="text-5xl block mb-3">🔒</span>
+              <p className="text-lg font-bold text-gray-700">Attestation verrouillée</p>
+              <p className="text-sm text-gray-500 mt-1">{stats.completed}/{stats.total} modules complétés</p>
+              <progress className="progress progress-primary w-48 mt-3" value={stats.completed} max={stats.total} />
+            </div>
+          </div>
+        )}
+        <div id="certificate" className="relative bg-white overflow-hidden">
             {/* Bordures */}
             <div className="border-[12px] border-[#306998] m-3">
               <div className="border-[3px] border-[#FFE873] m-1">
@@ -199,8 +198,7 @@ export default function Certificate() {
               Ce certificat est généré automatiquement et atteste de la complétion des 36 modules de la formation.
             </p>
           </div>
-        </>
-      )}
+        </div>
     </div>
     </>
   )
