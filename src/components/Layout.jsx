@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { MODULES } from '../data/modules'
 import { useProgress } from '../hooks/useProgress'
 import { useAuth } from '../contexts/AuthContext'
+import { supabase } from '../lib/supabase'
 
 const NAV = [
   { path: '/', label: 'Accueil', icon: '🏠' },
@@ -17,6 +18,16 @@ export default function Layout({ children }) {
   const { user, signOut, isConfigured, isAdmin } = useAuth()
   const { getOverallProgress, syncing, getModuleProgress } = useProgress(user)
   const stats = getOverallProgress(MODULES.length)
+  const [profile, setProfile] = useState(null)
+
+  useEffect(() => {
+    if (!user?.id || !isConfigured) { setProfile(null); return }
+    supabase.from('profiles').select('display_name, avatar_url').eq('id', user.id).single()
+      .then(({ data }) => setProfile(data))
+  }, [user?.id])
+
+  const displayName = profile?.display_name || user?.email?.split('@')[0] || ''
+  const avatarUrl = profile?.avatar_url
 
   const filteredModules = selectedPart
     ? MODULES.filter(m => m.part === selectedPart)
@@ -45,10 +56,16 @@ export default function Layout({ children }) {
               <div className="dropdown dropdown-end">
                 <label tabIndex={0} className="btn btn-ghost btn-sm btn-circle">
                   {user ? (
-                    <div className="avatar placeholder">
-                      <div className="bg-primary text-neutral-content w-7 rounded-full text-xs font-bold">
-                        {user.email?.charAt(0).toUpperCase()}
-                      </div>
+                    <div className="avatar">
+                      {avatarUrl ? (
+                        <div className="w-7 rounded-full">
+                          <img src={avatarUrl} alt="" className="object-cover" />
+                        </div>
+                      ) : (
+                        <div className="bg-primary text-neutral-content w-7 rounded-full text-xs font-bold">
+                          {displayName.charAt(0).toUpperCase()}
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -59,7 +76,7 @@ export default function Layout({ children }) {
                 <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box border border-base-300 w-44 shadow-lg">
                   {user ? (
                     <>
-                      <li className="menu-title"><span>{user.email?.split('@')[0]}</span></li>
+                      <li className="menu-title"><span>{displayName}</span></li>
                       <li><Link to="/profile" onClick={() => setSidebar(false)}>👤 Profil</Link></li>
                       <li><Link to="/progress" onClick={() => setSidebar(false)}>📊 Progression</Link></li>
                       {isAdmin && <li><Link to="/admin" onClick={() => setSidebar(false)}>⚙️ Admin</Link></li>}
@@ -129,17 +146,23 @@ export default function Layout({ children }) {
           {isConfigured && (user ? (
             <div className="mx-2 my-2 p-3 bg-base-300 rounded-xl border border-base-300">
               <Link to="/profile" onClick={() => setSidebar(false)} className="no-underline">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="avatar placeholder">
-                    <div className="bg-primary text-neutral-content w-10 rounded-full text-base font-bold ring-2 ring-base-200">
-                      {user.email?.charAt(0).toUpperCase()}
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm truncate text-base-content">{user.email?.split('@')[0]}</p>
-                    <p className="text-xs text-base-content/40 truncate">{user.email}</p>
-                  </div>
-                </div>
+                  <div className="flex items-center gap-3 mb-2">
+                   <div className="avatar">
+                     {avatarUrl ? (
+                       <div className="w-10 rounded-full ring-2 ring-base-200">
+                         <img src={avatarUrl} alt="" className="object-cover" />
+                       </div>
+                     ) : (
+                       <div className="bg-primary text-neutral-content w-10 rounded-full text-base font-bold ring-2 ring-base-200">
+                         {displayName.charAt(0).toUpperCase()}
+                       </div>
+                     )}
+                   </div>
+                   <div className="flex-1 min-w-0">
+                     <p className="font-semibold text-sm truncate text-base-content">{displayName}</p>
+                     <p className="text-xs text-base-content/40 truncate">{user.email}</p>
+                   </div>
+                 </div>
               </Link>
               <div className="flex items-center justify-between text-xs text-base-content/50 px-1 mb-2">
                 <span>{stats.completed}/{stats.total} modules</span>
